@@ -22,7 +22,7 @@ public final class BikeContract {
         public final static String COLUMN_SUPPLIER = "supplier";
         public final static String COLUMN_SUPPLIER_PHONE = "supplier_phone";
 
-        // possible values for COLUMN type entries
+        // possible values for COLUMN_TYPE entries
         public final static int TYPE_UNKNOWN = 0;
         public final static int TYPE_ROAD = 1;
         public final static int TYPE_MOUNTAIN = 2;
@@ -37,5 +37,12 @@ public final class BikeContract {
         public final static int TYPE_FOLDING = 11;
         public final static int TYPE_KIDS = 12;
         public final static int TYPE_TOURING = 13;
+
+        // default value for COLUMN_IMAGE entries
+        // TODO: add a default image to drawable
+        // TODO: replace the string below with a URI to that default image
+        public final static String IMAGE_DEFAULT = "default image";
+
+
     }
 }
