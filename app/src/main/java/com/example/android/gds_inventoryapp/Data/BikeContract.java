@@ -17,7 +17,6 @@ public final class BikeContract {
         public final static String COLUMN_MODEL = "model";
         public final static String COLUMN_TYPE = "type";
         public final static String COLUMN_PRICE = "price";
-        public final static String COLUMN_IMAGE = "image";
         public final static String COLUMN_QUANTITY = "quantity";
         public final static String COLUMN_SUPPLIER = "supplier";
         public final static String COLUMN_SUPPLIER_PHONE = "supplier_phone";
