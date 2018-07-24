@@ -1,6 +1,7 @@
 package com.example.android.gds_inventoryapp;
 
 import android.content.ContentValues;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -55,9 +56,12 @@ public class MainActivity extends AppCompatActivity {
         TextView displayView = findViewById(R.id.text_view_pet);
 
             try {
-                displayView.setText(
-                        "The bikes table contains " + cursor.getCount() + " bikes.\n\n"
+                int bikeCount = cursor.getCount();
+                Resources res = getResources();
+                String bikesFound = res.getQuantityString(
+                        R.plurals.numberOfBikeAvailable, bikeCount, bikeCount
                 );
+                displayView.setText(bikesFound);
 
                 displayView.append(
                         " | " + BikeEntry._ID + " | "
