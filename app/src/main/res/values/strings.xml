@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GDS_InventoryApp</string>
+    <string name="insert_test_data">Insert Test Data</string>
 </resources>

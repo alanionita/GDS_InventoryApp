@@ -30,12 +30,10 @@ public class BikeDbHelper extends SQLiteOpenHelper {
                 + BikeEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + BikeEntry.COLUMN_MAKE + " TEXT NOT NULL, "
                 + BikeEntry.COLUMN_MODEL + " TEXT NOT NULL, "
-                + BikeEntry.COLUMN_TYPE + " INTEGER NOT NULL DEFAULT "
+                + BikeEntry.COLUMN_TYPE + " INTEGER DEFAULT "
                     + BikeEntry.TYPE_UNKNOWN + ", "
-                + BikeEntry.COLUMN_PRICE + " INTEGER NOT NULL , "
-                + BikeEntry.COLUMN_IMAGE + " TEXT NOT NULL DEFAULT '"
-                + BikeEntry.IMAGE_DEFAULT + "', "
-                + BikeEntry.COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0, "
+                + BikeEntry.COLUMN_PRICE + " INTEGER DEFAULT 0, "
+                + BikeEntry.COLUMN_QUANTITY + " INTEGER DEFAULT 0, "
                 + BikeEntry.COLUMN_SUPPLIER + " TEXT NOT NULL, "
                 + BikeEntry.COLUMN_SUPPLIER_PHONE + " TEXT NOT NULL);";
 
