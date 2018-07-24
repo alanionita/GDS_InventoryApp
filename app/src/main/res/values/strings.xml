@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">GDS_InventoryApp</string>
     <string name="insert_test_data">Insert Test Data</string>
+    <plurals name="numberOfBikeAvailable">
+        <item quantity="zero">The bikes table contains no bikes.\n Please add some! \n</item>
+        <item quantity="one">The bikes table contains %d bike.\n\n</item>
+        <item quantity="other">The bikes table contains %d bikes.\n\n</item>
+    </plurals>
 </resources>
