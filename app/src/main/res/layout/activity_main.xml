@@ -11,7 +11,7 @@
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="EMPTY"
-        android:textSize="50sp" />
+        android:text="@string/listView_empty"
+        android:textSize="@dimen/empty_view_text_size" />
 
 </RelativeLayout>
