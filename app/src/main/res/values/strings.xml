@@ -6,4 +6,7 @@
         <item quantity="one">The bikes table contains %d bike.\n\n</item>
         <item quantity="other">The bikes table contains %d bikes.\n\n</item>
     </plurals>
+
+    <!--Text for the ListView empty state-->
+    <string name="listView_empty">EMPTY</string>
 </resources>
