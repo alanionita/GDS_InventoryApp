@@ -1,5 +1,6 @@
 package com.example.android.gds_inventoryapp.Data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 public final class BikeContract {
@@ -7,9 +8,19 @@ public final class BikeContract {
     // prevent accidental instantiating
     private BikeContract() {}
 
+    // Content URI variables
+    public static final String CONTENT_AUTHORITY = "com.example.android.gds_inventoryapp";
+    public static final String PATH_BIKES = "bikes";
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
     // defines constant values for the db table where one entry = one bike
     public static final class BikeEntry implements BaseColumns {
-        public final static String TABLE_NAME  = "bike";
+
+        // content URI
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BIKES);
+
+        // defined table name
+        public final static String TABLE_NAME = "bikes";
 
         // column names
         public final static String _ID = BaseColumns._ID;
