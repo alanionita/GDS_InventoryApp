@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 BikeEntry.COLUMN_MAKE,
                 BikeEntry.COLUMN_MODEL,
                 BikeEntry.COLUMN_PRICE,
+                BikeEntry.COLUMN_QUANTITY
         };
         return new CursorLoader(this,
                 BikeEntry.CONTENT_URI,
