@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return super.onOptionsItemSelected(item);
     }
 
+
     private void insertTestBikeData() {
         ContentValues values = new ContentValues();
         values.put(BikeEntry.COLUMN_MAKE, "Cinelli");

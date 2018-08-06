@@ -16,4 +16,8 @@
     <string name="made_by">by %s</string>
     <string name="quantity_of">%d items in stock</string>
     <string name="price_of">£%d</string>
+
+    <!-- Toasts -->
+    <string name="sold_one_bike">Sold a bike, congrats! 🎉 </string>
+    <string name="cant_sell_less_than_zero">Cannot make the sale, no bikes left in stock.</string>
 </resources>

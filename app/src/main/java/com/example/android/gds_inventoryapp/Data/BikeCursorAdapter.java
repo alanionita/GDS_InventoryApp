@@ -1,17 +1,24 @@
 package com.example.android.gds_inventoryapp.Data;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.gds_inventoryapp.Data.BikeContract.BikeEntry;
 import com.example.android.gds_inventoryapp.R;
 
 public class BikeCursorAdapter extends CursorAdapter {
+
+    private Uri currentBikeUri;
 
     public BikeCursorAdapter(Context context, Cursor c) {
         super(context, c, 0);
@@ -25,18 +32,21 @@ public class BikeCursorAdapter extends CursorAdapter {
 
     // Populates the views with the data
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
         // Find the required views
         TextView modelView = view.findViewById(R.id.model);
         TextView makeView = view.findViewById(R.id.make);
         TextView priceView = view.findViewById(R.id.price);
         TextView quantityView = view.findViewById(R.id.quantity);
+        ImageButton saleButton = view.findViewById(R.id.sale_button);
+
 
         // Find the relevant data from the cursor
+        final int id = cursor.getInt(cursor.getColumnIndex(BikeEntry._ID));
         String modelData = cursor.getString(cursor.getColumnIndex(BikeEntry.COLUMN_MODEL));
         String makeData = cursor.getString(cursor.getColumnIndex(BikeEntry.COLUMN_MAKE));
         Integer priceData = cursor.getInt(cursor.getColumnIndex(BikeEntry.COLUMN_PRICE));
-        Integer quantityData = cursor.getInt(cursor.getColumnIndex(BikeEntry.COLUMN_QUANTITY));
+        final Integer quantityData = cursor.getInt(cursor.getColumnIndex(BikeEntry.COLUMN_QUANTITY));
 
         // Build the formatted strings
         String formatedMakeString = view.getResources().getString(R.string.made_by, makeData);
@@ -48,5 +58,33 @@ public class BikeCursorAdapter extends CursorAdapter {
         makeView.setText(formatedMakeString);
         priceView.setText(formatedPriceString);
         quantityView.setText(formatedQuantityString);
+
+        // Bind the click listener to the sale button
+        saleButton.setOnClickListener(new ImageButton.OnClickListener() {
+            public void onClick(View v) {
+                sellABike(v);
+            }
+
+            private void sellABike(View view) {
+                // Create a new ContentValues() object
+                ContentValues values = new ContentValues();
+                // Append the content Uri with the id;
+                currentBikeUri = ContentUris.withAppendedId(BikeEntry.CONTENT_URI, id);
+
+                // Don't allow for quantityData to be less than 0
+                if (quantityData > 0) {
+                    // Remove one item from the quantity when a sale is made
+                    values.put(BikeEntry.COLUMN_QUANTITY, quantityData - 1);
+                    view.getContext().getContentResolver().update(currentBikeUri, values, null, null);
+                    Toast.makeText(context, context.getString(R.string.sold_one_bike),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, context.getString(R.string.cant_sell_less_than_zero),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
+
+
 }
