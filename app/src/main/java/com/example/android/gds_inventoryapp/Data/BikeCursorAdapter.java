@@ -51,7 +51,7 @@ public class BikeCursorAdapter extends CursorAdapter {
 
         // Build the formatted strings
         String formattedMakeString = view.getResources().getString(R.string.made_by, makeData);
-        String formattedQuantityString = view.getResources().getString(R.string.quantity_of, quantityData);
+        String formattedQuantityString = view.getResources().getString(R.string.quantity_of_long, quantityData);
         String formattedPriceString = view.getResources().getString(R.string.price_of, priceData);
 
         // Bind the data to the TextViews

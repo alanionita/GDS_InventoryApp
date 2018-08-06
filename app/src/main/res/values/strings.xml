@@ -14,11 +14,36 @@
     <string name="insert_test_data">Insert Test Data</string>
     <string name="sale_button_description">Sale button</string>
     <string name="made_by">by %s</string>
-    <string name="quantity_of">%d items in stock</string>
+    <string name="quantity_of_long">%d items in stock</string>
     <string name="price_of">£%d</string>
     <string name="sale_button_text">Sale</string>
 
     <!-- Toasts -->
     <string name="sold_one_bike">Sold a bike, congrats! 🎉 </string>
     <string name="cant_sell_less_than_zero">Cannot make the sale, no bikes left in stock.</string>
+
+    <!-- EditorActivity strings-->
+    <string name="make_entry_hint">Make</string>
+    <string name="model_entry_hint">Model</string>
+    <string name="type_entry_hint">Bike Type</string>
+    <string name="price_entry_hint">Price</string>
+    <string name="quantity_of_short">%d items</string>
+    <string name="quantity_entry_hint">Quantity</string>
+    <string name="supplier_entry_hint">Supplier</string>
+    <string name="supplier_phone_entry_hint">Supplier Phone</string>
+    <string name="save_button">SAVE</string>
+    <string name="add_button">ADD</string>
+    <string name="bike_type_road">Road</string>
+    <string name="bike_type_mountain">Mountain</string>
+    <string name="bike_type_hybrid">Hybrid</string>
+    <string name="bike_type_fixed">Fixed</string>
+    <string name="bike_type_city">City</string>
+    <string name="bike_type_gravel_cross">Gravel and Cross</string>
+    <string name="bike_type_tandem">Tandem</string>
+    <string name="bike_type_recumbent">Recumbent</string>
+    <string name="bike_type_cargo">Cargo</string>
+    <string name="bike_type_electric">Electric</string>
+    <string name="bike_type_folding">Folding</string>
+    <string name="bike_type_kids">Kids</string>
+    <string name="bike_type_touring">Touring</string>
 </resources>

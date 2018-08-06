@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="bike_type_options">
+        <item>@string/bike_type_road</item>
+        <item>@string/bike_type_mountain</item>
+        <item>@string/bike_type_hybrid</item>
+        <item>@string/bike_type_fixed</item>
+        <item>@string/bike_type_city</item>
+        <item>@string/bike_type_gravel_cross</item>
+        <item>@string/bike_type_tandem</item>
+        <item>@string/bike_type_recumbent</item>
+        <item>@string/bike_type_cargo</item>
+        <item>@string/bike_type_electric</item>
+        <item>@string/bike_type_folding</item>
+        <item>@string/bike_type_kids</item>
+        <item>@string/bike_type_touring</item>
+    </string-array>
+</resources>
