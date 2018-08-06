@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -25,7 +26,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.catalog_main);
 
         // Create an instance of the cursor adaptor
         bikeCursorAdapter = new BikeCursorAdapter(this, null);
@@ -34,6 +35,9 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         ListView bikeList = findViewById(R.id.list);
         bikeList.setEmptyView(findViewById(R.id.empty));
         bikeList.setAdapter(bikeCursorAdapter);
+
+        // Find FAB
+        FloatingActionButton fab = findViewById(R.id.fab);
 
         // Initialise the loader
         getSupportLoaderManager().initLoader(BIKE_LOADER, null, this);
