@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -38,26 +39,27 @@ public class BikeCursorAdapter extends CursorAdapter {
         TextView makeView = view.findViewById(R.id.make);
         TextView priceView = view.findViewById(R.id.price);
         TextView quantityView = view.findViewById(R.id.quantity);
-        ImageButton saleButton = view.findViewById(R.id.sale_button);
+        Button saleButton = view.findViewById(R.id.sale_button);
 
 
         // Find the relevant data from the cursor
         final int id = cursor.getInt(cursor.getColumnIndex(BikeEntry._ID));
-        String modelData = cursor.getString(cursor.getColumnIndex(BikeEntry.COLUMN_MODEL));
-        String makeData = cursor.getString(cursor.getColumnIndex(BikeEntry.COLUMN_MAKE));
-        Integer priceData = cursor.getInt(cursor.getColumnIndex(BikeEntry.COLUMN_PRICE));
+        final String modelData = cursor.getString(cursor.getColumnIndex(BikeEntry.COLUMN_MODEL));
+        final String makeData = cursor.getString(cursor.getColumnIndex(BikeEntry.COLUMN_MAKE));
+        final Integer priceData = cursor.getInt(cursor.getColumnIndex(BikeEntry.COLUMN_PRICE));
         final Integer quantityData = cursor.getInt(cursor.getColumnIndex(BikeEntry.COLUMN_QUANTITY));
 
         // Build the formatted strings
-        String formatedMakeString = view.getResources().getString(R.string.made_by, makeData);
-        String formatedQuantityString = view.getResources().getString(R.string.quantity_of, quantityData);
-        String formatedPriceString = view.getResources().getString(R.string.price_of, priceData);
+        String formattedMakeString = view.getResources().getString(R.string.made_by, makeData);
+        String formattedQuantityString = view.getResources().getString(R.string.quantity_of, quantityData);
+        String formattedPriceString = view.getResources().getString(R.string.price_of, priceData);
 
         // Bind the data to the TextViews
         modelView.setText(modelData);
-        makeView.setText(formatedMakeString);
-        priceView.setText(formatedPriceString);
-        quantityView.setText(formatedQuantityString);
+        makeView.setText(formattedMakeString);
+        priceView.setText(formattedPriceString);
+        quantityView.setText(formattedQuantityString);
+        saleButton.setText(R.string.sale_button_text);
 
         // Bind the click listener to the sale button
         saleButton.setOnClickListener(new ImageButton.OnClickListener() {

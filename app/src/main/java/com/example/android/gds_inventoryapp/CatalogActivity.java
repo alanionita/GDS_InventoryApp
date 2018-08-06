@@ -17,7 +17,7 @@ import com.example.android.gds_inventoryapp.Data.BikeContract.BikeEntry;
 import com.example.android.gds_inventoryapp.Data.BikeCursorAdapter;
 import com.example.android.gds_inventoryapp.Data.BikeDbHelper;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private BikeDbHelper bikeDbHelper;
     private static final int BIKE_LOADER = 0;
     private BikeCursorAdapter bikeCursorAdapter;
