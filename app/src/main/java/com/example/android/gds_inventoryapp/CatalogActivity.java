@@ -1,6 +1,7 @@
 package com.example.android.gds_inventoryapp;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.example.android.gds_inventoryapp.Data.BikeContract.BikeEntry;
@@ -26,7 +28,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.catalog_main);
+        setContentView(R.layout.catalog_activity);
 
         // Create an instance of the cursor adaptor
         bikeCursorAdapter = new BikeCursorAdapter(this, null);
@@ -38,6 +40,15 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
         // Find FAB
         FloatingActionButton fab = findViewById(R.id.fab);
+
+        // Set onClick that triggers the editor activity
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Initialise the loader
         getSupportLoaderManager().initLoader(BIKE_LOADER, null, this);
