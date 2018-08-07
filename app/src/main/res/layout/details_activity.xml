@@ -2,11 +2,92 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:focusableInTouchMode="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/m_margin"
+    android:paddingLeft="@dimen/m_margin"
+    android:paddingRight="@dimen/m_margin"
+    android:paddingTop="@dimen/s_margin">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="details" />
+        android:id="@+id/details_label_model"
+        style="@style/TextViewLabel"
+        android:text="Model" />
+
+    <TextView
+        android:id="@+id/details_content_model"
+        style="@style/TextViewContent"
+        android:text="Vigorelli" />
+
+    <TextView
+        android:id="@+id/details_label_make"
+        style="@style/TextViewLabel"
+        android:text="Make" />
+
+    <TextView
+        android:id="@+id/details_content_make"
+        style="@style/TextViewContent"
+        android:text="Cinelli" />
+
+    <TextView
+        android:id="@+id/details_label_type"
+        style="@style/TextViewLabel"
+        android:text="Type" />
+
+    <TextView
+        android:id="@+id/details_content_type"
+        style="@style/TextViewContent"
+        android:text="Unknown" />
+
+    <TextView
+        android:id="@+id/details_label_price"
+        style="@style/TextViewLabel"
+        android:text="Price" />
+
+    <TextView
+        android:id="@+id/details_content_price"
+        style="@style/TextViewContent"
+        android:text="£1000" />
+
+    <TextView
+        android:id="@+id/details_label_quantity"
+        style="@style/TextViewLabel"
+        android:text="Quantity" />
+
+    <TextView
+        android:id="@+id/details_content_quantity"
+        style="@style/TextViewContent"
+        android:text="10" />
+
+    <TextView
+        android:id="@+id/details_label_supplier"
+        style="@style/TextViewLabel"
+        android:text="Supplier" />
+
+    <TextView
+        android:id="@+id/details_content_supplier"
+        style="@style/TextViewContent"
+        android:text="Evans Cycles" />
+
+    <TextView
+        android:id="@+id/details_label_supplier_number"
+        style="@style/TextViewLabel"
+        android:text="Supplier Number" />
+
+    <TextView
+        android:id="@+id/details_content_supplier_number"
+        style="@style/TextViewContent"
+        android:text="0161 765 8765" />
+
+    <Button
+        android:id="@+id/details_edit_button"
+        style="@style/DetailsButton"
+        android:text="Edit Product" />
+
+    <Button
+        android:id="@+id/details_delete_button"
+        style="@style/DetailsButton"
+        android:text="Delete Product" />
 
 </LinearLayout>

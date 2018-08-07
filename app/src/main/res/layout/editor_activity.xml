@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/editor_layout"
     android:clickable="true"
+    android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
     android:paddingBottom="@dimen/m_margin"
@@ -97,10 +98,7 @@
 
     <Button
         android:id="@+id/save_add_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="@dimen/m_margin"
+        style="@style/DetailsButton"
         android:text="@string/save_button" />
 
 </LinearLayout>
