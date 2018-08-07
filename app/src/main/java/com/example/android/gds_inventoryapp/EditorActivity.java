@@ -2,8 +2,6 @@ package com.example.android.gds_inventoryapp;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +10,7 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -36,6 +35,7 @@ public class EditorActivity extends AppCompatActivity {
     private EditText quantityEditText;
     private EditText supplierEditText;
     private EditText supplierPhoneEditText;
+    private int bikeType = BikeEntry.TYPE_UNKNOWN;
 
     // Hides the softkeyboard, useful when dealing with view of different inputs
     // eg. AutoCompleteTextView
@@ -56,6 +56,12 @@ public class EditorActivity extends AppCompatActivity {
         final AutoCompleteTextView bikeTypeAutoCompleteTextView = findViewById(
                 R.id.editor_bike_type);
         Button editorButton = findViewById(R.id.save_add_button);
+        makeEditText = findViewById(R.id.editor_make_entry);
+        modelEditText = findViewById(R.id.editor_model_entry);
+        priceEditText = findViewById(R.id.editor_price_entry);
+        quantityEditText = findViewById(R.id.editor_quantity_entry);
+        supplierEditText = findViewById(R.id.editor_supplier_entry);
+        supplierPhoneEditText = findViewById(R.id.editor_supplier_phone_entry);
 
         // add onClick to editorButton
         editorButton.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +73,7 @@ public class EditorActivity extends AppCompatActivity {
         });
 
         // Add functionality to AutoCompleteTextView
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this,
                 R.layout.support_simple_spinner_dropdown_item,
                 getResources().getStringArray(R.array.bike_type_options));
@@ -78,7 +84,7 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 hideSoftKeyboard(EditorActivity.this);
-                // Adds a timer so that the AutoCompleteTextView opens after softkeyboard close
+                // Adds a timer so that the AutoCompleteTextView opens after soft keyboard close
                 // implemented in order to reduce the amount of movement and
                 // distraction on the screen
                 v.postDelayed(new Runnable() {
@@ -89,6 +95,46 @@ public class EditorActivity extends AppCompatActivity {
                 }, 100);
 
                 return false;
+            }
+        });
+        bikeTypeAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View arg1, int pos,
+                                    long id) {
+                String selection = (String) parent.getItemAtPosition(pos);
+
+                if (!TextUtils.isEmpty(selection)) {
+                    if (selection.equals(getString(R.string.bike_type_road))) {
+                        bikeType = BikeEntry.TYPE_ROAD;
+                    } else if (selection.equals(getString(R.string.bike_type_mountain))) {
+                        bikeType = BikeEntry.TYPE_MOUNTAIN;
+                    } else if (selection.equals(getString(R.string.bike_type_hybrid))) {
+                        bikeType = BikeEntry.TYPE_HYBRID;
+                    } else if (selection.equals(getString(R.string.bike_type_fixed))) {
+                        bikeType = BikeEntry.TYPE_FIXED;
+                    } else if (selection.equals(getString(R.string.bike_type_city))) {
+                        bikeType = BikeEntry.TYPE_CITY;
+                    } else if (selection.equals(getString(R.string.bike_type_gravel_cross))) {
+                        bikeType = BikeEntry.TYPE_GRAVEL_AND_CROSS;
+                    } else if (selection.equals(getString(R.string.bike_type_tandem))) {
+                        bikeType = BikeEntry.TYPE_TANDEM;
+                    } else if (selection.equals(getString(R.string.bike_type_recumbent))) {
+                        bikeType = BikeEntry.TYPE_RECUMBENT;
+                    } else if (selection.equals(getString(R.string.bike_type_cargo))) {
+                        bikeType = BikeEntry.TYPE_CARGO;
+                    } else if (selection.equals(getString(R.string.bike_type_electric))) {
+                        bikeType = BikeEntry.TYPE_ELECTRIC;
+                    } else if (selection.equals(getString(R.string.bike_type_folding))) {
+                        bikeType = BikeEntry.TYPE_FOLDING;
+                    } else if (selection.equals(getString(R.string.bike_type_kids))) {
+                        bikeType = BikeEntry.TYPE_KIDS;
+                    } else if (selection.equals(getString(R.string.bike_type_touring))) {
+                        bikeType = BikeEntry.TYPE_TOURING;
+                    } else {
+                        bikeType = BikeEntry.TYPE_UNKNOWN;
+                    }
+                }
             }
         });
     }
@@ -119,6 +165,7 @@ public class EditorActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(BikeEntry.COLUMN_MAKE, makeString);
         values.put(BikeEntry.COLUMN_MODEL, modelString);
+        values.put(BikeEntry.COLUMN_TYPE, bikeType);
         values.put(BikeEntry.COLUMN_PRICE, Integer.parseInt(priceString));
         values.put(BikeEntry.COLUMN_QUANTITY, Integer.parseInt(quantityString));
         values.put(BikeEntry.COLUMN_SUPPLIER, supplierString);
