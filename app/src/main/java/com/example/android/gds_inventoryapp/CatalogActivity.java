@@ -1,5 +1,6 @@
 package com.example.android.gds_inventoryapp;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,9 +12,11 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.gds_inventoryapp.Data.BikeContract.BikeEntry;
@@ -50,9 +53,21 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             }
         });
 
+        // Click listener: when clicking a list item trigger DetailsActivity
+        bikeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                // Create new intent to go to DetailsActivity
+                Intent intent = new Intent(adapterView.getContext(), DetailsActivity.class);
+                Uri currentBikeUri = ContentUris.withAppendedId(BikeEntry.CONTENT_URI, id);
+                intent.setData(currentBikeUri);
+                Log.i("detailsActivityTrigger", "Triggered");
+                startActivity(intent);
+            }
+        });
+
         // Initialise the loader
         getSupportLoaderManager().initLoader(BIKE_LOADER, null, this);
-
     }
 
     @Override

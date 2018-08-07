@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:descendantFocusability="blocksDescendants"
     android:padding="@dimen/activity_margin">
 
     <TextView
@@ -12,6 +13,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:textAppearanceMedium"
         android:textColor="#2B3D4D"
+        android:focusable="false"
         app:fontFamily="sans-serif-medium" />
 
     <TextView
@@ -23,6 +25,7 @@
         android:layout_toRightOf="@+id/model"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="#AEB6BD"
+        android:focusable="false"
         app:fontFamily="sans-serif" />
 
     <TextView
@@ -32,6 +35,7 @@
         android:layout_below="@id/model"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="#AEB6BD"
+        android:focusable="false"
         app:fontFamily="sans-serif" />
 
     <TextView
@@ -41,6 +45,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="#AEB6BD"
+        android:focusable="false"
         app:fontFamily="sans-serif" />
 
     <Button
@@ -50,6 +55,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:contentDescription="@string/sale_button_description"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:focusable="false" />
 
 </RelativeLayout>
