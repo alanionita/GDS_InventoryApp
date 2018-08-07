@@ -48,4 +48,6 @@
     <string name="bike_type_touring">Touring</string>
     <string name="save_bike_add_message_success">Bike was successfully added!</string>
     <string name="save_bike_add_message_fail">Bike could not be added!</string>
+    <string name="editor_activity_title_add">Add a new bike</string>
+    <string name="editor_activity_title_edit">Edit a bike</string>
 </resources>

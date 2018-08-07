@@ -52,6 +52,13 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.editor_activity);
 
+        // Depending on the currentBikeUri change the activity title
+        if (currentBikeUri == null) {
+            setTitle(R.string.editor_activity_title_add);
+        } else {
+            setTitle(R.string.editor_activity_title_edit);
+        }
+
         // Find all of the required view
         final AutoCompleteTextView bikeTypeAutoCompleteTextView = findViewById(
                 R.id.editor_bike_type);
