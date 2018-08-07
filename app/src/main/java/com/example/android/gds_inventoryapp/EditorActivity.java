@@ -80,6 +80,8 @@ public class EditorActivity extends AppCompatActivity {
 
         bikeTypeAutoCompleteTextView.setAdapter(adapter);
         bikeTypeAutoCompleteTextView.setKeyListener(null);
+
+        // Depending on what option is touched update the displayed text
         bikeTypeAutoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -97,6 +99,8 @@ public class EditorActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        // Depending on what option is clicked update the bikeType holder value
         bikeTypeAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -105,31 +109,44 @@ public class EditorActivity extends AppCompatActivity {
                 String selection = (String) parent.getItemAtPosition(pos);
 
                 if (!TextUtils.isEmpty(selection)) {
-                    if (selection.equals(getString(R.string.bike_type_road))) {
+                    if (selection.equals(
+                            getString(R.string.bike_type_road))) {
                         bikeType = BikeEntry.TYPE_ROAD;
-                    } else if (selection.equals(getString(R.string.bike_type_mountain))) {
+                    } else if (selection.equals(
+                            getString(R.string.bike_type_mountain))) {
                         bikeType = BikeEntry.TYPE_MOUNTAIN;
-                    } else if (selection.equals(getString(R.string.bike_type_hybrid))) {
+                    } else if (selection.equals(
+                            getString(R.string.bike_type_hybrid))) {
                         bikeType = BikeEntry.TYPE_HYBRID;
-                    } else if (selection.equals(getString(R.string.bike_type_fixed))) {
+                    } else if (selection.equals(
+                            getString(R.string.bike_type_fixed))) {
                         bikeType = BikeEntry.TYPE_FIXED;
-                    } else if (selection.equals(getString(R.string.bike_type_city))) {
+                    } else if (selection.equals(
+                            getString(R.string.bike_type_city))) {
                         bikeType = BikeEntry.TYPE_CITY;
-                    } else if (selection.equals(getString(R.string.bike_type_gravel_cross))) {
+                    } else if (selection.equals(
+                            getString(R.string.bike_type_gravel_cross))) {
                         bikeType = BikeEntry.TYPE_GRAVEL_AND_CROSS;
-                    } else if (selection.equals(getString(R.string.bike_type_tandem))) {
+                    } else if (selection.equals(
+                            getString(R.string.bike_type_tandem))) {
                         bikeType = BikeEntry.TYPE_TANDEM;
-                    } else if (selection.equals(getString(R.string.bike_type_recumbent))) {
+                    } else if (selection.equals(
+                            getString(R.string.bike_type_recumbent))) {
                         bikeType = BikeEntry.TYPE_RECUMBENT;
-                    } else if (selection.equals(getString(R.string.bike_type_cargo))) {
+                    } else if (selection.equals(
+                            getString(R.string.bike_type_cargo))) {
                         bikeType = BikeEntry.TYPE_CARGO;
-                    } else if (selection.equals(getString(R.string.bike_type_electric))) {
+                    } else if (selection.equals(
+                            getString(R.string.bike_type_electric))) {
                         bikeType = BikeEntry.TYPE_ELECTRIC;
-                    } else if (selection.equals(getString(R.string.bike_type_folding))) {
+                    } else if (selection.equals(
+                            getString(R.string.bike_type_folding))) {
                         bikeType = BikeEntry.TYPE_FOLDING;
-                    } else if (selection.equals(getString(R.string.bike_type_kids))) {
+                    } else if (selection.equals(
+                            getString(R.string.bike_type_kids))) {
                         bikeType = BikeEntry.TYPE_KIDS;
-                    } else if (selection.equals(getString(R.string.bike_type_touring))) {
+                    } else if (selection.equals(
+                            getString(R.string.bike_type_touring))) {
                         bikeType = BikeEntry.TYPE_TOURING;
                     } else {
                         bikeType = BikeEntry.TYPE_UNKNOWN;
@@ -178,11 +195,13 @@ public class EditorActivity extends AppCompatActivity {
             // Show a toast message depending on whether or not the insertion was successful.
             if (newUri == null) {
                 // If the new content URI is null, then there was an error with insertion.
-                Toast.makeText(this, "Insertion failed",
+                Toast.makeText(this,
+                        getString(R.string.save_bike_add_message_fail),
                         Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the insertion was successful and we can display a toast.
-                Toast.makeText(this, "Insertion succesfull",
+                Toast.makeText(this,
+                        getString(R.string.save_bike_add_message_success),
                         Toast.LENGTH_SHORT).show();
             }
         } else {

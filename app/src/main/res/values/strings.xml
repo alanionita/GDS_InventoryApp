@@ -46,4 +46,6 @@
     <string name="bike_type_folding">Folding</string>
     <string name="bike_type_kids">Kids</string>
     <string name="bike_type_touring">Touring</string>
+    <string name="save_bike_add_message_success">Bike was successfully added!</string>
+    <string name="save_bike_add_message_fail">Bike could not be added!</string>
 </resources>
