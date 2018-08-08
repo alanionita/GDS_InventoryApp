@@ -69,4 +69,7 @@
     <string name="details_activity_title">Bike details</string>
     <string name="details_price_content">£%d</string>
     <string name="details_quantity_content">%d items in stock</string>
+    <string name="details_increase_quantity_toast_success">Increased quantity by %d</string>
+    <string name="details_decrease_quantity_toast_success">Decreased quantity by %d</string>
+    <string name="details_decrease_quantity_toast_fail">No items left in stock</string>
 </resources>

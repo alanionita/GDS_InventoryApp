@@ -2,6 +2,8 @@ package com.example.android.gds_inventoryapp;
 
 import android.app.Activity;
 import android.app.LoaderManager;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -18,7 +20,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.gds_inventoryapp.Data.BikeContract.BikeEntry;
 
@@ -38,8 +42,9 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     private TextView supplierTextView;
     private TextView supplierPhoneTextView;
     private Button orderButton;
-    private Button increaseQuantity;
-    private Button decreaseQuantity;
+    private Button increaseQuantityButton;
+    private Button decreaseQuantityButton;
+    private EditText quantityIncrementEditText;
 
     // List of bike types
     private List<String> bikeTypes;
@@ -70,8 +75,9 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         supplierTextView = findViewById(R.id.details_content_supplier);
         supplierPhoneTextView = findViewById(R.id.details_content_supplier_number);
         orderButton = findViewById(R.id.details_order_button);
-        increaseQuantity = findViewById(R.id.increase_quantity_button);
-        decreaseQuantity = findViewById(R.id.decrease_quantity_button);
+        increaseQuantityButton = findViewById(R.id.increase_quantity_button);
+        decreaseQuantityButton = findViewById(R.id.decrease_quantity_button);
+        quantityIncrementEditText = findViewById(R.id.quantity_increment);
 
         // Populate the list of bike types
         bikeTypes = Arrays.asList(getResources().getStringArray(R.array.bike_type_options));
@@ -114,6 +120,9 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         // Go to the first row and start reading from cursor
         if (cursor.moveToFirst()) {
             // Extract out the value from the Cursor for the given column index
+            final Integer id = cursor.getInt(
+                    cursor.getColumnIndex(
+                            BikeEntry._ID));
             String makeData = cursor.getString(
                     cursor.getColumnIndex(
                             BikeEntry.COLUMN_MAKE));
@@ -126,7 +135,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             Integer priceData = cursor.getInt(
                             cursor.getColumnIndex(
                                     BikeEntry.COLUMN_PRICE));
-            Integer quantityData = cursor.getInt(
+            final Integer quantityData = cursor.getInt(
                             cursor.getColumnIndex(
                                     BikeEntry.COLUMN_QUANTITY));
             String supplierData = cursor.getString(
@@ -156,6 +165,8 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             quantityTextView.setText(quantityFormattedString);
             supplierTextView.setText(supplierData);
             supplierPhoneTextView.setText(supplierPhoneData);
+
+            // Define order button click functionality
             orderButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -176,6 +187,70 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                     }
                 }
             });
+
+            // Define the quantity increase and decrease functionality
+            increaseQuantityButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Integer increment;
+                    // If EditText is empty default to 1
+                    if (quantityIncrementEditText.getText().toString().isEmpty()) {
+                        increment = 1;
+                    } else {
+                        increment = Integer.parseInt(
+                                quantityIncrementEditText.getText().toString());
+                    }
+
+                    // Change the quantity in the database
+                    changeQuantity(view, quantityData, id, context, increment,
+                            Operator.PLUS);
+
+                    // Build the formatted string
+                    String formattedString = context.getString(
+                            R.string.details_increase_quantity_toast_success, increment);
+
+                    // Send some feedback about the action
+                    Toast.makeText(context,
+                            formattedString,
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            decreaseQuantityButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Integer increment;
+
+                    // If EditText is empty default to 1
+                    if (quantityIncrementEditText.getText().toString().isEmpty()) {
+                        increment = 1;
+                    } else {
+                        increment = Integer.parseInt(
+                                quantityIncrementEditText.getText().toString());
+                    }
+
+                    // Quantity cannot be lower than 0
+                    if (quantityData - increment >= 0) {
+                        // Change the quantity in the database
+                        changeQuantity(view, quantityData, id, context, increment,
+                                Operator.MINUS);
+                        // Build formatted string
+                        String formattedString = context.getString(
+                                R.string.details_decrease_quantity_toast_success,
+                                increment);
+
+                        // Give some positive feedback to the user
+                        Toast.makeText(context,
+                                formattedString,
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Send fail notice
+                        Toast.makeText(context,
+                                R.string.details_decrease_quantity_toast_fail,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 
@@ -189,5 +264,21 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         quantityTextView.setText("");
         supplierTextView.setText("");
         supplierPhoneTextView.setText("");
+    }
+
+    private void changeQuantity(View view, Integer quantity, int id, Context context,
+                                int increment, Operator operation) {
+        // Create a new ContentValues() object
+        ContentValues values = new ContentValues();
+        // Append the content Uri with the id;
+        currentBikeUri = ContentUris.withAppendedId(BikeEntry.CONTENT_URI, id);
+
+        // Remove one item from the quantity when a sale is made
+        values.put(BikeEntry.COLUMN_QUANTITY, calculate(operation, quantity, increment));
+        view.getContext().getContentResolver().update(currentBikeUri, values, null, null);
+    }
+
+    private String calculate(Operator op, int a, int b) {
+        return String.valueOf(op.apply(a, b));
     }
 }

@@ -64,29 +64,28 @@ public class BikeCursorAdapter extends CursorAdapter {
         // Bind the click listener to the sale button
         saleButton.setOnClickListener(new ImageButton.OnClickListener() {
             public void onClick(View v) {
-                sellABike(v);
-            }
-
-            private void sellABike(View view) {
-                // Create a new ContentValues() object
-                ContentValues values = new ContentValues();
-                // Append the content Uri with the id;
-                currentBikeUri = ContentUris.withAppendedId(BikeEntry.CONTENT_URI, id);
-
-                // Don't allow for quantityData to be less than 0
-                if (quantityData > 0) {
-                    // Remove one item from the quantity when a sale is made
-                    values.put(BikeEntry.COLUMN_QUANTITY, quantityData - 1);
-                    view.getContext().getContentResolver().update(currentBikeUri, values, null, null);
-                    Toast.makeText(context, context.getString(R.string.sold_one_bike),
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, context.getString(R.string.cant_sell_less_than_zero),
-                            Toast.LENGTH_SHORT).show();
-                }
+                sellABike(v, quantityData, id, context);
             }
         });
     }
 
+    private void sellABike(View view, Integer quantity, int id, Context context) {
+        // Create a new ContentValues() object
+        ContentValues values = new ContentValues();
+        // Append the content Uri with the id;
+        currentBikeUri = ContentUris.withAppendedId(BikeEntry.CONTENT_URI, id);
+
+        // Don't allow for quantityData to be less than 0
+        if (quantity > 0) {
+            // Remove one item from the quantity when a sale is made
+            values.put(BikeEntry.COLUMN_QUANTITY, quantity - 1);
+            view.getContext().getContentResolver().update(currentBikeUri, values, null, null);
+            Toast.makeText(context, context.getString(R.string.sold_one_bike),
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, context.getString(R.string.cant_sell_less_than_zero),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
 
 }
