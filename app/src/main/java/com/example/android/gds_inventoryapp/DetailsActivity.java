@@ -3,6 +3,7 @@ package com.example.android.gds_inventoryapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -19,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,6 +49,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     private Button decreaseQuantityButton;
     private EditText quantityIncrementEditText;
     private Button deleteButton;
+    private Button editButton;
 
     // List of bike types
     private List<String> bikeTypes;
@@ -81,6 +84,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         decreaseQuantityButton = findViewById(R.id.decrease_quantity_button);
         quantityIncrementEditText = findViewById(R.id.quantity_increment);
         deleteButton = findViewById(R.id.details_delete_button);
+        editButton = findViewById(R.id.details_edit_button);
 
         // Populate the list of bike types
         bikeTypes = Arrays.asList(getResources().getStringArray(R.array.bike_type_options));
@@ -196,6 +200,18 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                 @Override
                 public void onClick(View view) {
                     showDeleteConfirmationDialog();
+                }
+            });
+
+            // Define the editButton functionality
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, EditorActivity.class);
+                    Uri currentBikeUri = ContentUris.withAppendedId(BikeEntry.CONTENT_URI, id);
+                    intent.setData(currentBikeUri);
+                    Log.i("editActivityTrigger", "Triggered");
+                    startActivity(intent);
                 }
             });
 
