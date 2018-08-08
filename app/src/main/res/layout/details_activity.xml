@@ -13,81 +13,74 @@
     <TextView
         android:id="@+id/details_label_model"
         style="@style/TextViewLabel"
-        android:text="Model" />
+        android:text="@string/details_model_label" />
 
     <TextView
         android:id="@+id/details_content_model"
-        style="@style/TextViewContent"
-        android:text="Vigorelli" />
+        style="@style/TextViewContent" />
 
     <TextView
         android:id="@+id/details_label_make"
         style="@style/TextViewLabel"
-        android:text="Make" />
+        android:text="@string/details_make_label" />
 
     <TextView
         android:id="@+id/details_content_make"
-        style="@style/TextViewContent"
-        android:text="Cinelli" />
+        style="@style/TextViewContent" />
 
     <TextView
         android:id="@+id/details_label_type"
         style="@style/TextViewLabel"
-        android:text="Type" />
+        android:text="@string/details_type_label" />
 
     <TextView
         android:id="@+id/details_content_type"
-        style="@style/TextViewContent"
-        android:text="Unknown" />
+        style="@style/TextViewContent" />
 
     <TextView
         android:id="@+id/details_label_price"
         style="@style/TextViewLabel"
-        android:text="Price" />
+        android:text="@string/details_price_label" />
 
     <TextView
         android:id="@+id/details_content_price"
-        style="@style/TextViewContent"
-        android:text="£1000" />
+        style="@style/TextViewContent" />
 
     <TextView
         android:id="@+id/details_label_quantity"
         style="@style/TextViewLabel"
-        android:text="Quantity" />
+        android:text="@string/details_quantity_label" />
 
     <TextView
         android:id="@+id/details_content_quantity"
-        style="@style/TextViewContent"
-        android:text="10" />
+        style="@style/TextViewContent" />
 
     <TextView
         android:id="@+id/details_label_supplier"
         style="@style/TextViewLabel"
-        android:text="Supplier" />
+        android:text="@string/details_supplier_label" />
 
     <TextView
         android:id="@+id/details_content_supplier"
-        style="@style/TextViewContent"
-        android:text="Evans Cycles" />
+        style="@style/TextViewContent" />
 
     <TextView
         android:id="@+id/details_label_supplier_number"
         style="@style/TextViewLabel"
-        android:text="Supplier Number" />
+        android:text="@string/details_supplier_phone_label" />
 
     <TextView
         android:id="@+id/details_content_supplier_number"
-        style="@style/TextViewContent"
-        android:text="0161 765 8765" />
+        style="@style/TextViewContent" />
 
     <Button
         android:id="@+id/details_edit_button"
         style="@style/DetailsButton"
-        android:text="Edit Product" />
+        android:text="@string/details_edit_button" />
 
     <Button
         android:id="@+id/details_delete_button"
         style="@style/DetailsButton"
-        android:text="Delete Product" />
+        android:text="@string/details_delete_button" />
 
 </LinearLayout>

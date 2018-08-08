@@ -28,7 +28,7 @@ public class EditorActivity extends AppCompatActivity {
     // Content Uri for current bike
     private Uri currentBikeUri;
 
-    // Find the input views
+    // Define the input views
     private EditText makeEditText;
     private EditText modelEditText;
     private EditText priceEditText;
@@ -80,7 +80,7 @@ public class EditorActivity extends AppCompatActivity {
         });
 
         // Add functionality to AutoCompleteTextView
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 R.layout.support_simple_spinner_dropdown_item,
                 getResources().getStringArray(R.array.bike_type_options));

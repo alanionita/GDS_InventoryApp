@@ -1,16 +1,16 @@
 package com.example.android.gds_inventoryapp;
 
+import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -67,7 +67,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         });
 
         // Initialise the loader
-        getSupportLoaderManager().initLoader(BIKE_LOADER, null, this);
+        getLoaderManager().initLoader(BIKE_LOADER, null, this);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     @NonNull
     @Override
-    public android.support.v4.content.Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         // Define the projections
         String[] projection = {
                 BikeEntry._ID,

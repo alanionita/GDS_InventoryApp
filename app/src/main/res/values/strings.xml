@@ -25,7 +25,7 @@
     <!-- EditorActivity strings-->
     <string name="make_entry_hint">Make</string>
     <string name="model_entry_hint">Model</string>
-    <string name="type_entry_hint">Bike Type</string>
+    <string name="type_entry_hint">Type</string>
     <string name="price_entry_hint">Price</string>
     <string name="quantity_of_short">%d items</string>
     <string name="quantity_entry_hint">Quantity</string>
@@ -33,6 +33,7 @@
     <string name="supplier_phone_entry_hint">Supplier Phone</string>
     <string name="save_button">SAVE</string>
     <string name="add_button">ADD</string>
+    <string name="bike_type_unknown">Unknown</string>
     <string name="bike_type_road">Road</string>
     <string name="bike_type_mountain">Mountain</string>
     <string name="bike_type_hybrid">Hybrid</string>
@@ -50,4 +51,15 @@
     <string name="save_bike_add_message_fail">Bike could not be added!</string>
     <string name="editor_activity_title_add">Add a new bike</string>
     <string name="editor_activity_title_edit">Edit a bike</string>
+
+    <!-- DetailsActivity strings -->
+    <string name="details_make_label">Make</string>
+    <string name="details_model_label">Model</string>
+    <string name="details_type_label">Type</string>
+    <string name="details_price_label">Price</string>
+    <string name="details_quantity_label">Quantity</string>
+    <string name="details_supplier_label">Supplier</string>
+    <string name="details_supplier_phone_label">Supplier Phone</string>
+    <string name="details_edit_button">Edit Bike</string>
+    <string name="details_delete_button">Delete Bike</string>
 </resources>
