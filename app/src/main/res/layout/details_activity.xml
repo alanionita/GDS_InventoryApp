@@ -5,10 +5,7 @@
     android:focusableInTouchMode="true"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/m_margin"
-    android:paddingLeft="@dimen/m_margin"
-    android:paddingRight="@dimen/m_margin"
-    android:paddingTop="@dimen/s_margin">
+    android:padding="@dimen/m_margin">
 
     <TextView
         android:id="@+id/details_label_model"
@@ -46,14 +43,47 @@
         android:id="@+id/details_content_price"
         style="@style/TextViewContent" />
 
-    <TextView
-        android:id="@+id/details_label_quantity"
-        style="@style/TextViewLabel"
-        android:text="@string/details_quantity_label" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/details_content_quantity"
-        style="@style/TextViewContent" />
+        <TextView
+            android:id="@+id/details_label_quantity"
+            style="@style/TextViewLabel"
+            android:text="@string/details_quantity_label" />
+
+        <TextView
+            android:id="@+id/details_content_quantity"
+            style="@style/TextViewContent"
+            android:layout_below="@+id/details_label_quantity" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="@dimen/details_button_height_width"
+                android:layout_height="@dimen/details_button_height_width"
+                android:text="@string/details_plus_button" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/details_quantity_edit_hint"
+                android:inputType="number"
+                android:maxWidth="@dimen/details_max_width" />
+
+            <Button
+                android:layout_width="@dimen/details_button_height_width"
+                android:layout_height="@dimen/details_button_height_width"
+                android:text="@string/details_minus_button" />
+        </LinearLayout>
+    </RelativeLayout>
+
 
     <TextView
         android:id="@+id/details_label_supplier"
@@ -64,23 +94,54 @@
         android:id="@+id/details_content_supplier"
         style="@style/TextViewContent" />
 
-    <TextView
-        android:id="@+id/details_label_supplier_number"
-        style="@style/TextViewLabel"
-        android:text="@string/details_supplier_phone_label" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/details_content_supplier_number"
-        style="@style/TextViewContent" />
+        <TextView
+            android:id="@+id/details_label_supplier_number"
+            style="@style/TextViewLabel"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="@string/details_supplier_phone_label" />
 
-    <Button
-        android:id="@+id/details_edit_button"
-        style="@style/DetailsButton"
-        android:text="@string/details_edit_button" />
+        <TextView
+            android:id="@+id/details_content_supplier_number"
+            style="@style/TextViewContent"
+            android:layout_below="@id/details_label_supplier_number"
+            android:maxWidth="@dimen/details_max_width" />
 
-    <Button
-        android:id="@+id/details_delete_button"
-        style="@style/DetailsButton"
-        android:text="@string/details_delete_button" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="@string/details_order_button" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/m_margin">
+
+        <Button
+            android:id="@+id/details_delete_button"
+            style="@style/DetailsButton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="@string/details_delete_button" />
+
+        <Button
+            android:id="@+id/details_edit_button"
+            style="@style/DetailsButton"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/m_margin"
+            android:layout_marginStart="@dimen/m_margin"
+            android:layout_toEndOf="@+id/details_delete_button"
+            android:layout_toRightOf="@+id/details_delete_button"
+            android:text="@string/details_edit_button" />
+    </RelativeLayout>
+
 
 </LinearLayout>
