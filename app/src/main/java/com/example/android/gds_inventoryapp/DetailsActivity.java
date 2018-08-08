@@ -1,16 +1,23 @@
 package com.example.android.gds_inventoryapp;
 
+import android.app.Activity;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.android.gds_inventoryapp.Data.BikeContract.BikeEntry;
@@ -22,7 +29,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     private static final int BIKE_LOADER = 1;
     private Uri currentBikeUri;
 
-    // Define the input views
+    // Define the input views and buttons
     private TextView makeTextView;
     private TextView modelTextView;
     private TextView typeTextView;
@@ -30,20 +37,25 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     private TextView quantityTextView;
     private TextView supplierTextView;
     private TextView supplierPhoneTextView;
+    private Button orderButton;
+    private Button increaseQuantity;
+    private Button decreaseQuantity;
 
     // List of bike types
     private List<String> bikeTypes;
 
     // Define global Resources
     private Resources res;
+    private Context context;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.details_activity);
 
-        // Assign Resources
+        // Assign Resources and Context
         res = getResources();
+        context = getApplicationContext();
 
         // Extract the date from the Uri
         Intent intent = getIntent();
@@ -57,6 +69,9 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         quantityTextView = findViewById(R.id.details_content_quantity);
         supplierTextView = findViewById(R.id.details_content_supplier);
         supplierPhoneTextView = findViewById(R.id.details_content_supplier_number);
+        orderButton = findViewById(R.id.details_order_button);
+        increaseQuantity = findViewById(R.id.increase_quantity_button);
+        decreaseQuantity = findViewById(R.id.decrease_quantity_button);
 
         // Populate the list of bike types
         bikeTypes = Arrays.asList(getResources().getStringArray(R.array.bike_type_options));
@@ -117,7 +132,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             String supplierData = cursor.getString(
                     cursor.getColumnIndex(
                             BikeEntry.COLUMN_SUPPLIER));
-            String supplierPhoneData = cursor.getString(
+            final String supplierPhoneData = cursor.getString(
                     cursor.getColumnIndex(
                             BikeEntry.COLUMN_SUPPLIER_PHONE));
 
@@ -141,6 +156,26 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             quantityTextView.setText(quantityFormattedString);
             supplierTextView.setText(supplierData);
             supplierPhoneTextView.setText(supplierPhoneData);
+            orderButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Check for permissions
+                    if(ContextCompat.checkSelfPermission(
+                        v.getContext(),
+                            android.Manifest.permission.CALL_PHONE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions((Activity)
+                                v.getContext(),
+                                new String[]{android.Manifest.permission.CALL_PHONE}, 0);
+                    } else {
+                        startActivity(
+                                // Start a new intent in the relevant app
+                                new Intent(
+                                        Intent.ACTION_CALL,
+                                        Uri.parse("tel:" + supplierPhoneData)));
+                    }
+                }
+            });
         }
     }
 
