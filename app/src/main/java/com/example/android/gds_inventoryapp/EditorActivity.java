@@ -1,10 +1,12 @@
 package com.example.android.gds_inventoryapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.res.Resources;
@@ -12,8 +14,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.CompletionInfo;
@@ -34,12 +38,10 @@ import java.util.List;
 public class EditorActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    // Set default selection for bike type
-    private int bikeTypeDefault = BikeContract.BikeEntry.TYPE_UNKNOWN;
-
     // Identifier for Bike data loader
     private static final int EXISTING_BIKE_LOADER = 0;
-
+    // Set default selection for bike type
+    private int bikeTypeDefault = BikeContract.BikeEntry.TYPE_UNKNOWN;
     // Content Uri for current bike
     private Uri currentBikeUri;
 
@@ -52,6 +54,18 @@ public class EditorActivity extends AppCompatActivity implements
     private EditText supplierPhoneEditText;
     private AutoCompleteTextView bikeTypeAutoCompleteTextView;
     private int bikeType = BikeEntry.TYPE_UNKNOWN;
+
+    // view was changed
+    private boolean viewHasChanged = false;
+
+    // touch listener that checks is any view was touched
+    private View.OnTouchListener touchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            viewHasChanged = true;
+            return false;
+        }
+    };
 
     // Define global Resources
     private Resources res;
@@ -100,15 +114,26 @@ public class EditorActivity extends AppCompatActivity implements
         }
 
         // Find all of the required view
-        bikeTypeAutoCompleteTextView = findViewById(
-                R.id.editor_bike_type);
-        Button saveAddButton = findViewById(R.id.save_add_button);
+
+
         makeEditText = findViewById(R.id.editor_make_entry);
         modelEditText = findViewById(R.id.editor_model_entry);
         priceEditText = findViewById(R.id.editor_price_entry);
         quantityEditText = findViewById(R.id.editor_quantity_entry);
         supplierEditText = findViewById(R.id.editor_supplier_entry);
         supplierPhoneEditText = findViewById(R.id.editor_supplier_phone_entry);
+        bikeTypeAutoCompleteTextView = findViewById(
+                R.id.editor_bike_type);
+        Button saveAddButton = findViewById(R.id.save_add_button);
+
+        // Set touch listener to all views
+        makeEditText.setOnTouchListener(touchListener);
+        modelEditText.setOnTouchListener(touchListener);
+        priceEditText.setOnTouchListener(touchListener);
+        quantityEditText.setOnTouchListener(touchListener);
+        supplierEditText.setOnTouchListener(touchListener);
+        supplierPhoneEditText.setOnTouchListener(touchListener);
+        bikeTypeAutoCompleteTextView.setOnTouchListener(touchListener);
 
         // add onClick to saveAddButton
         saveAddButton.setOnClickListener(new View.OnClickListener() {
@@ -356,5 +381,70 @@ public class EditorActivity extends AppCompatActivity implements
         supplierEditText.getText().clear();
         supplierPhoneEditText.getText().clear();
         bikeTypeAutoCompleteTextView.setListSelection(0);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // User clicked on a menu option in the app bar overflow menu
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (!viewHasChanged) {
+                    NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                    return true;
+                }
+                DialogInterface.OnClickListener discardButtonClickListener =
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // User clicked "Discard" button, navigate to parent activity.
+                                NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                            }
+                        };
+
+                // Show a dialog that notifies the user they have unsaved changes
+                triggerUnsavedChangesDialog(discardButtonClickListener);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!viewHasChanged) {
+            super.onBackPressed();
+            return;
+        }
+
+        // Else warn the user about the discarding of entered data
+        DialogInterface.OnClickListener discardButtonClickListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // User clicked "Discard" button, close the current activity.
+                        finish();
+                    }
+                };
+
+        // Show dialog that there are unsaved changes
+        triggerUnsavedChangesDialog(discardButtonClickListener);
+    }
+
+    // Creates a Dialog when changes are about to be discarded
+    private void triggerUnsavedChangesDialog(
+            DialogInterface.OnClickListener discardButtonClickListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.discard_dialog_message);
+        builder.setPositiveButton(R.string.discard_dialog_confirm, discardButtonClickListener);
+        builder.setNegativeButton(R.string.discard_dialog_deny, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

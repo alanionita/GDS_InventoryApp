@@ -53,6 +53,9 @@
     <string name="editor_activity_title_edit">Edit a bike</string>
     <string name="save_bike_update_message_success">Bike was successfully updated!</string>
     <string name="save_bike_update_message_fail">Bike could not be updated!</string>
+    <string name="discard_dialog_message">Do you want to discard changes</string>
+    <string name="discard_dialog_confirm">Yes</string>
+    <string name="discard_dialog_deny">No, back to editing</string>
 
     <!-- DetailsActivity strings -->
     <string name="details_make_label">Make</string>
