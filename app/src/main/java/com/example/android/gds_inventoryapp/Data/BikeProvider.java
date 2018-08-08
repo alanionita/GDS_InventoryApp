@@ -84,8 +84,9 @@ public class BikeProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
-
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        if (getContext() != null) {
+            cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        }
         return cursor;
     }
 
@@ -176,8 +177,9 @@ public class BikeProvider extends ContentProvider {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
-
-        getContext().getContentResolver().notifyChange(uri, null);
+        if (getContext() != null) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
 
         // Once we know the ID of the new row in the table,
         // return the new URI with the ID appended to the end of it
@@ -185,22 +187,58 @@ public class BikeProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int delete(@NonNull Uri uri, @Nullable String selection,
+                      @Nullable String[] selectionArgs) {
+        // Get writeable database
+        SQLiteDatabase database = bikeDbHelper.getWritableDatabase();
+
+        // Track the number of rows that were deleted
+        int rowsDeleted;
+
+        final int match = uriMatcher.match(uri);
+        switch (match) {
+            case BIKES:
+                // Delete all rows that match the selection and selection args
+                rowsDeleted = database.delete(BikeEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case SINGLE_BIKE:
+                // Delete a single row given by the ID in the URI
+                selection = BikeEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                rowsDeleted = database.delete(BikeEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
+
+        // If 1 or more rows were deleted, then notify all listeners that the data at the
+        // given URI has changed
+        if (rowsDeleted != 0) {
+            if (getContext() != null) {
+                getContext().getContentResolver().notifyChange(uri, null);
+            }
+        }
+
+        // Return the number of rows deleted
+        return rowsDeleted;
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
         final int match = uriMatcher.match(uri);
-        switch (match) {
-            case BIKES:
-                return updateBike(uri, contentValues, selection, selectionArgs);
-            case SINGLE_BIKE:
-                selection = BikeEntry._ID + "=?";
-                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return updateBike(uri, contentValues, selection, selectionArgs);
-            default:
-                throw new IllegalArgumentException("Update is not supported for " + uri);
+        if (contentValues != null) {
+            switch (match) {
+                case BIKES:
+                    return updateBike(uri, contentValues, selection, selectionArgs);
+                case SINGLE_BIKE:
+                    selection = BikeEntry._ID + "=?";
+                    selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                    return updateBike(uri, contentValues, selection, selectionArgs);
+                default:
+                    throw new IllegalArgumentException("Update is not supported for " + uri);
+            }
+        } else {
+            throw new IllegalArgumentException("Update could not be completed because contentValues are missing");
         }
     }
 
@@ -219,7 +257,9 @@ public class BikeProvider extends ContentProvider {
         // If 1 or more rows were updated, then notify all listeners that the data at the
         // given URI has changed
         if (rowsUpdated != 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
+            if (getContext() != null) {
+                getContext().getContentResolver().notifyChange(uri, null);
+            }
         }
 
         // Return the number of rows updated

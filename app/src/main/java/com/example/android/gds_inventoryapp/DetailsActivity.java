@@ -1,11 +1,12 @@
 package com.example.android.gds_inventoryapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
@@ -45,6 +46,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     private Button increaseQuantityButton;
     private Button decreaseQuantityButton;
     private EditText quantityIncrementEditText;
+    private Button deleteButton;
 
     // List of bike types
     private List<String> bikeTypes;
@@ -78,6 +80,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         increaseQuantityButton = findViewById(R.id.increase_quantity_button);
         decreaseQuantityButton = findViewById(R.id.decrease_quantity_button);
         quantityIncrementEditText = findViewById(R.id.quantity_increment);
+        deleteButton = findViewById(R.id.details_delete_button);
 
         // Populate the list of bike types
         bikeTypes = Arrays.asList(getResources().getStringArray(R.array.bike_type_options));
@@ -188,6 +191,14 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                 }
             });
 
+            // Define the deleteButton functionality
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showDeleteConfirmationDialog();
+                }
+            });
+
             // Define the quantity increase and decrease functionality
             increaseQuantityButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -266,13 +277,11 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         supplierPhoneTextView.setText("");
     }
 
+    // Changes the quantity of the item in stock
     private void changeQuantity(View view, Integer quantity, int id, Context context,
                                 int increment, Operator operation) {
         // Create a new ContentValues() object
         ContentValues values = new ContentValues();
-        // Append the content Uri with the id;
-        currentBikeUri = ContentUris.withAppendedId(BikeEntry.CONTENT_URI, id);
-
         // Remove one item from the quantity when a sale is made
         values.put(BikeEntry.COLUMN_QUANTITY, calculate(operation, quantity, increment));
         view.getContext().getContentResolver().update(currentBikeUri, values, null, null);
@@ -280,5 +289,55 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 
     private String calculate(Operator op, int a, int b) {
         return String.valueOf(op.apply(a, b));
+    }
+
+    private void showDeleteConfirmationDialog() {
+        // Create an AlertDialog.Builder, set the message, and click listeners
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.details_delete_message);
+        builder.setPositiveButton(
+                R.string.details_delete_positive_confirmation,
+                new DialogInterface.OnClickListener() {
+                    // User clicked the "Delete" button, so delete the bike
+                    public void onClick(DialogInterface dialog, int id) {
+                        deleteBike();
+                    }
+                });
+        builder.setNegativeButton(
+                R.string.details_delete_negative_confirmation,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked the "Cancel" button, so dismiss the dialog
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void deleteBike() {
+        // Only perform the delete if this is an existing bike.
+        if (currentBikeUri != null) {
+            // Delete the bike via the contentResolver
+            int rowsDeleted = getContentResolver().delete(
+                    currentBikeUri, null, null);
+
+            // Show a toast message depending on whether or not the delete was successful.
+            if (rowsDeleted == 0) {
+                // If no rows were deleted, then there was an error with the delete.
+                Toast.makeText(this, R.string.details_delete_fail_toast,
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the delete was successful and we can display a toast.
+                Toast.makeText(this, R.string.details_delete_confirmation_toast,
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+        // Close the activity
+        finish();
     }
 }

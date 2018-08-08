@@ -72,4 +72,9 @@
     <string name="details_increase_quantity_toast_success">Increased quantity by %d</string>
     <string name="details_decrease_quantity_toast_success">Decreased quantity by %d</string>
     <string name="details_decrease_quantity_toast_fail">No items left in stock</string>
+    <string name="details_delete_message">Do you really want to delete this bike?</string>
+    <string name="details_delete_positive_confirmation">Delete</string>
+    <string name="details_delete_negative_confirmation">Cancel</string>
+    <string name="details_delete_confirmation_toast">Bike was successfully deleted</string>
+    <string name="details_delete_fail_toast">Deletion could not be completed</string>
 </resources>
