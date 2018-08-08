@@ -62,4 +62,7 @@
     <string name="details_supplier_phone_label">Supplier Phone</string>
     <string name="details_edit_button">Edit Bike</string>
     <string name="details_delete_button">Delete Bike</string>
+    <string name="details_activity_title">Bike details</string>
+    <string name="details_price_content">£%d</string>
+    <string name="details_quantity_content">%d items in stock</string>
 </resources>

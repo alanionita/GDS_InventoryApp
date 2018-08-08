@@ -4,6 +4,7 @@ import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,10 +34,16 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     // List of bike types
     private List<String> bikeTypes;
 
+    // Define global Resources
+    private Resources res;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.details_activity);
+
+        // Assign Resources
+        res = getResources();
 
         // Extract the date from the Uri
         Intent intent = getIntent();
@@ -54,11 +61,8 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         // Populate the list of bike types
         bikeTypes = Arrays.asList(getResources().getStringArray(R.array.bike_type_options));
 
-        if (currentBikeUri == null) {
-            setTitle("Bike Not Found");
-        } else {
-            getLoaderManager().initLoader(BIKE_LOADER, null, this);
-        }
+        // Initialise loader
+        getLoaderManager().initLoader(BIKE_LOADER, null, this);
     }
 
     @NonNull
@@ -104,16 +108,12 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             Integer typeData = cursor.getInt(
                     cursor.getColumnIndex(
                             BikeEntry.COLUMN_TYPE));
-            String priceData = String.valueOf(
-                    cursor.getInt(
+            Integer priceData = cursor.getInt(
                             cursor.getColumnIndex(
-                                    BikeEntry.COLUMN_PRICE))
-            );
-            String quantityData = String.valueOf(
-                    cursor.getInt(
+                                    BikeEntry.COLUMN_PRICE));
+            Integer quantityData = cursor.getInt(
                             cursor.getColumnIndex(
-                                    BikeEntry.COLUMN_QUANTITY))
-            );
+                                    BikeEntry.COLUMN_QUANTITY));
             String supplierData = cursor.getString(
                     cursor.getColumnIndex(
                             BikeEntry.COLUMN_SUPPLIER));
@@ -124,14 +124,21 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             // Get string from bikeTypeList using typeData
             String bikeTypeString = bikeTypes.get(typeData);
 
+            // Generate formatted strings
+            String priceFormattedString = res.getString(
+                    R.string.details_price_content, priceData);
+            String quantityFormattedString = res.getString(
+                    R.string.details_quantity_content, quantityData);
+
             // Edit title
-            setTitle("Bike details");
+            setTitle(getString(R.string.details_activity_title));
+
             // Update the views on the screen with the values from the database
             makeTextView.setText(makeData);
             modelTextView.setText(modelData);
             typeTextView.setText(bikeTypeString);
-            priceTextView.setText(priceData);
-            quantityTextView.setText(quantityData);
+            priceTextView.setText(priceFormattedString);
+            quantityTextView.setText(quantityFormattedString);
             supplierTextView.setText(supplierData);
             supplierPhoneTextView.setText(supplierPhoneData);
         }
