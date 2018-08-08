@@ -1,7 +1,14 @@
 package com.example.android.gds_inventoryapp;
 
 import android.app.Activity;
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
+import android.content.res.Resources;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,10 +28,17 @@ import android.widget.Toast;
 import com.example.android.gds_inventoryapp.Data.BikeContract;
 import com.example.android.gds_inventoryapp.Data.BikeContract.BikeEntry;
 
-public class EditorActivity extends AppCompatActivity {
+import java.util.Arrays;
+import java.util.List;
+
+public class EditorActivity extends AppCompatActivity implements
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     // Set default selection for bike type
     private int bikeTypeDefault = BikeContract.BikeEntry.TYPE_UNKNOWN;
+
+    // Identifier for Bike data loader
+    private static final int EXISTING_BIKE_LOADER = 0;
 
     // Content Uri for current bike
     private Uri currentBikeUri;
@@ -35,7 +50,15 @@ public class EditorActivity extends AppCompatActivity {
     private EditText quantityEditText;
     private EditText supplierEditText;
     private EditText supplierPhoneEditText;
+    private AutoCompleteTextView bikeTypeAutoCompleteTextView;
     private int bikeType = BikeEntry.TYPE_UNKNOWN;
+
+    // Define global Resources
+    private Resources res;
+    private Context context;
+
+    // List of bike types
+    private List<String> bikeTypes;
 
     // Hides the softkeyboard, useful when dealing with view of different inputs
     // eg. AutoCompleteTextView
@@ -43,8 +66,11 @@ public class EditorActivity extends AppCompatActivity {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(
                         Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(
-                activity.getCurrentFocus().getWindowToken(), 0);
+        if (inputMethodManager != null &&
+                activity.getCurrentFocus() != null) {
+            inputMethodManager.hideSoftInputFromWindow(
+                    activity.getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     @Override
@@ -52,17 +78,31 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.editor_activity);
 
+        // Extract the data from the Uri
+        Intent intent = getIntent();
+        currentBikeUri = intent.getData();
+
+        // Initiate the res variables
+        res = getResources();
+        context = getApplicationContext();
+
+        // Populate the list of bike types
+        bikeTypes = Arrays.asList(getResources().getStringArray(R.array.bike_type_options));
+
         // Depending on the currentBikeUri change the activity title
         if (currentBikeUri == null) {
             setTitle(R.string.editor_activity_title_add);
         } else {
             setTitle(R.string.editor_activity_title_edit);
+
+            // Initialize a loader to read from db
+            getLoaderManager().initLoader(EXISTING_BIKE_LOADER, null, this);
         }
 
         // Find all of the required view
-        final AutoCompleteTextView bikeTypeAutoCompleteTextView = findViewById(
+        bikeTypeAutoCompleteTextView = findViewById(
                 R.id.editor_bike_type);
-        Button editorButton = findViewById(R.id.save_add_button);
+        Button saveAddButton = findViewById(R.id.save_add_button);
         makeEditText = findViewById(R.id.editor_make_entry);
         modelEditText = findViewById(R.id.editor_model_entry);
         priceEditText = findViewById(R.id.editor_price_entry);
@@ -70,8 +110,8 @@ public class EditorActivity extends AppCompatActivity {
         supplierEditText = findViewById(R.id.editor_supplier_entry);
         supplierPhoneEditText = findViewById(R.id.editor_supplier_phone_entry);
 
-        // add onClick to editorButton
-        editorButton.setOnClickListener(new View.OnClickListener() {
+        // add onClick to saveAddButton
+        saveAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 saveBike();
@@ -171,6 +211,7 @@ public class EditorActivity extends AppCompatActivity {
         String quantityString = quantityEditText.getText().toString().trim();
         String supplierString = supplierEditText.getText().toString().trim();
         String supplierPhoneString = supplierPhoneEditText.getText().toString().trim();
+        int bikeTypeSelection = bikeTypeAutoCompleteTextView.getListSelection();
 
         // check if it's an existing bike and where data has been entered
         if (currentBikeUri == null &&
@@ -179,7 +220,8 @@ public class EditorActivity extends AppCompatActivity {
                 TextUtils.isEmpty(priceString) &&
                 TextUtils.isEmpty(quantityString) &&
                 TextUtils.isEmpty(supplierString) &&
-                TextUtils.isEmpty(supplierPhoneString)) {
+                TextUtils.isEmpty(supplierPhoneString) &&
+                (bikeTypeSelection == 0)) {
             // Since no fields were modified, we can return early without creating a new entry.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return;
@@ -212,7 +254,107 @@ public class EditorActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         } else {
-           // add logic here for when you click on an existing bike entry
+            // add logic here for when you click on an existing bike entry
+            int rowsAffected = getContentResolver().update(currentBikeUri, values, null, null);
+            // Show a toast message depending on whether or not the update was successful.
+            if (rowsAffected == 0) {
+                // If no rows were affected, then there was an error with the update.
+                Toast.makeText(this, getString(
+                        R.string.save_bike_update_message_fail),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the update was successful and we can display a toast.
+                Toast.makeText(this,
+                        getString(R.string.save_bike_update_message_success),
+                        Toast.LENGTH_SHORT).show();
+            }
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        // define projection
+        String[] projection = {
+                BikeEntry._ID,
+                BikeEntry.COLUMN_MODEL,
+                BikeEntry.COLUMN_MAKE,
+                BikeEntry.COLUMN_TYPE,
+                BikeEntry.COLUMN_PRICE,
+                BikeEntry.COLUMN_QUANTITY,
+                BikeEntry.COLUMN_SUPPLIER,
+                BikeEntry.COLUMN_SUPPLIER_PHONE,
+        };
+
+        // Execute the contentProvider query
+        return new CursorLoader(this,
+                currentBikeUri,
+                projection,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        // Early exit is the cursor is empty
+        if (cursor == null || cursor.getCount() < 1) {
+            return;
+        }
+
+        // Go to the first row and start reading from cursor
+        if (cursor.moveToFirst()) {
+            // Extract out the value from the Cursor for the given column index
+            Integer id = cursor.getInt(
+                    cursor.getColumnIndex(
+                            BikeEntry._ID));
+            String makeData = cursor.getString(
+                    cursor.getColumnIndex(
+                            BikeEntry.COLUMN_MAKE));
+            String modelData = cursor.getString(
+                    cursor.getColumnIndex(
+                            BikeEntry.COLUMN_MODEL));
+            Integer typeData = cursor.getInt(
+                    cursor.getColumnIndex(
+                            BikeEntry.COLUMN_TYPE));
+            Integer priceData = cursor.getInt(
+                    cursor.getColumnIndex(
+                            BikeEntry.COLUMN_PRICE));
+            Integer quantityData = cursor.getInt(
+                    cursor.getColumnIndex(
+                            BikeEntry.COLUMN_QUANTITY));
+            String supplierData = cursor.getString(
+                    cursor.getColumnIndex(
+                            BikeEntry.COLUMN_SUPPLIER));
+            String supplierPhoneData = cursor.getString(
+                    cursor.getColumnIndex(
+                            BikeEntry.COLUMN_SUPPLIER_PHONE));
+
+            // Edit title
+            setTitle(getString(R.string.details_activity_title));
+
+            // Update the views on the screen with the values from the database
+            makeEditText.setText(makeData);
+            modelEditText.setText(modelData);
+            priceEditText.setText(String.valueOf(priceData));
+            quantityEditText.setText(String.valueOf(quantityData));
+            supplierEditText.setText(supplierData);
+            supplierPhoneEditText.setText(supplierPhoneData);
+
+            // For the AutoCompleteTextView dropdown we need to show the dropdown first
+            bikeTypeAutoCompleteTextView.showDropDown();
+            // Trigger this method becase .setSelection doesn't produce the right result
+            bikeTypeAutoCompleteTextView.onCommitCompletion(new CompletionInfo(0, typeData, null));
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        makeEditText.getText().clear();
+        modelEditText.getText().clear();
+        priceEditText.getText().clear();
+        quantityEditText.getText().clear();
+        supplierEditText.getText().clear();
+        supplierPhoneEditText.getText().clear();
+        bikeTypeAutoCompleteTextView.setListSelection(0);
     }
 }

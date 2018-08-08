@@ -67,7 +67,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         res = getResources();
         context = getApplicationContext();
 
-        // Extract the date from the Uri
+        // Extract the data from the Uri
         Intent intent = getIntent();
         currentBikeUri = intent.getData();
 
@@ -153,7 +153,14 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                             BikeEntry.COLUMN_SUPPLIER_PHONE));
 
             // Get string from bikeTypeList using typeData
-            String bikeTypeString = bikeTypes.get(typeData);
+            Log.i("detailsView: typeData", typeData.toString());
+            String bikeTypeString;
+            if (typeData == -1) {
+                bikeTypeString = bikeTypes.get(0);
+            } else {
+                bikeTypeString = bikeTypes.get(typeData);
+            }
+
 
             // Generate formatted strings
             String priceFormattedString = res.getString(
