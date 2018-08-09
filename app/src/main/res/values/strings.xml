@@ -56,6 +56,7 @@
     <string name="discard_dialog_message">Do you want to discard changes</string>
     <string name="discard_dialog_confirm">Yes</string>
     <string name="discard_dialog_deny">No, back to editing</string>
+    <string name="null_values_warning">Some of the fields were null, please try to complete the form</string>
 
     <!-- DetailsActivity strings -->
     <string name="details_make_label">Make</string>

@@ -97,9 +97,6 @@ public class BikeProvider extends ContentProvider {
         final int match = uriMatcher.match(uri);
         switch (match) {
             case BIKES:
-                if (contentValues == null) {
-                    throw new IllegalArgumentException("ContentValues are null");
-                }
                 return insertBike(uri, contentValues);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
@@ -146,7 +143,6 @@ public class BikeProvider extends ContentProvider {
                 throw new IllegalArgumentException("Bike entries require one of the assigned bike types.");
         }
 
-        // Check that the price is not a negative number
         int price = contentValues.getAsInteger(BikeEntry.COLUMN_PRICE);
         if (price < 0) {
             throw new IllegalArgumentException("Bike entries require a price input");

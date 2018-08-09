@@ -240,15 +240,14 @@ public class EditorActivity extends AppCompatActivity implements
 
         // check if it's an existing bike and where data has been entered
         if (currentBikeUri == null &&
-                TextUtils.isEmpty(makeString) &&
-                TextUtils.isEmpty(modelString) &&
-                TextUtils.isEmpty(priceString) &&
-                TextUtils.isEmpty(quantityString) &&
-                TextUtils.isEmpty(supplierString) &&
-                TextUtils.isEmpty(supplierPhoneString) &&
-                (bikeTypeSelection == 0)) {
-            // Since no fields were modified, we can return early without creating a new entry.
-            // No need to create ContentValues and no need to do any ContentProvider operations.
+                TextUtils.isEmpty(makeString) ||
+                TextUtils.isEmpty(modelString) ||
+                TextUtils.isEmpty(priceString) ||
+                TextUtils.isEmpty(quantityString) ||
+                TextUtils.isEmpty(supplierString) ||
+                TextUtils.isEmpty(supplierPhoneString) ||
+                bikeTypeSelection == -1) {
+            Toast.makeText(context, R.string.null_values_warning, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -257,8 +256,12 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(BikeEntry.COLUMN_MAKE, makeString);
         values.put(BikeEntry.COLUMN_MODEL, modelString);
         values.put(BikeEntry.COLUMN_TYPE, bikeType);
-        values.put(BikeEntry.COLUMN_PRICE, Integer.parseInt(priceString));
-        values.put(BikeEntry.COLUMN_QUANTITY, Integer.parseInt(quantityString));
+        if (!TextUtils.isEmpty(priceString)) {
+            values.put(BikeEntry.COLUMN_PRICE, Integer.parseInt(priceString));
+        }
+        if (!TextUtils.isEmpty(quantityString)) {
+            values.put(BikeEntry.COLUMN_PRICE, Integer.parseInt(quantityString));
+        }
         values.put(BikeEntry.COLUMN_SUPPLIER, supplierString);
         values.put(BikeEntry.COLUMN_SUPPLIER_PHONE, supplierPhoneString);
 
