@@ -8,7 +8,7 @@
     </plurals>
 
     <!-- ListView emptyView strings-->
-    <string name="listView_empty">EMPTY</string>
+    <string name="listView_empty">Oh no!\n\nThis list is empty 😕\n\nTo add inventory\n\nTap the plus button below\n\n👇</string>
 
     <!--CatalogActivity strings-->
     <string name="insert_test_data">Insert Test Data</string>

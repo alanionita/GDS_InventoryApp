@@ -239,8 +239,7 @@ public class EditorActivity extends AppCompatActivity implements
         int bikeTypeSelection = bikeTypeAutoCompleteTextView.getListSelection();
 
         // check if it's an existing bike and where data has been entered
-        if (currentBikeUri == null &&
-                TextUtils.isEmpty(makeString) ||
+        if (TextUtils.isEmpty(makeString) ||
                 TextUtils.isEmpty(modelString) ||
                 TextUtils.isEmpty(priceString) ||
                 TextUtils.isEmpty(quantityString) ||
@@ -251,24 +250,29 @@ public class EditorActivity extends AppCompatActivity implements
             return;
         }
 
+        // Default values for integers
+        int price = 0;
+        int quantity = 0;
+        if (!TextUtils.isEmpty(quantityString)) {
+            quantity = Integer.parseInt(quantityString);
+        }
+        if (!TextUtils.isEmpty(quantityString)) {
+            price = Integer.parseInt(priceString);
+        }
+
         // Build the content values object
         ContentValues values = new ContentValues();
         values.put(BikeEntry.COLUMN_MAKE, makeString);
         values.put(BikeEntry.COLUMN_MODEL, modelString);
         values.put(BikeEntry.COLUMN_TYPE, bikeType);
-        if (!TextUtils.isEmpty(priceString)) {
-            values.put(BikeEntry.COLUMN_PRICE, Integer.parseInt(priceString));
-        }
-        if (!TextUtils.isEmpty(quantityString)) {
-            values.put(BikeEntry.COLUMN_PRICE, Integer.parseInt(quantityString));
-        }
+        values.put(BikeEntry.COLUMN_PRICE, price);
+        values.put(BikeEntry.COLUMN_QUANTITY, quantity);
         values.put(BikeEntry.COLUMN_SUPPLIER, supplierString);
         values.put(BikeEntry.COLUMN_SUPPLIER_PHONE, supplierPhoneString);
 
         // Determine if this is a new or existing bike by checking if currentBikeUri is null or not
         if (currentBikeUri == null) {
             Uri newUri = getContentResolver().insert(BikeEntry.CONTENT_URI, values);
-
             // Show a toast message depending on whether or not the insertion was successful.
             if (newUri == null) {
                 // If the new content URI is null, then there was an error with insertion.

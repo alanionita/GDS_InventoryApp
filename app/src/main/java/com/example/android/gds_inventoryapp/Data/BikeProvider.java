@@ -93,7 +93,7 @@ public class BikeProvider extends ContentProvider {
     // Insert new data into the Provider given ContentValues
     @Nullable
     @Override
-    public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
+    public Uri insert(@NonNull Uri uri, ContentValues contentValues) {
         final int match = uriMatcher.match(uri);
         switch (match) {
             case BIKES:

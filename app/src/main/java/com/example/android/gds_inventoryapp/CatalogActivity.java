@@ -13,8 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -69,24 +67,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         // Initialise the loader
         getLoaderManager().initLoader(BIKE_LOADER, null, this);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Handles 'insert test data' menu option
-            case R.id.insert_test_data:
-                insertTestBikeData();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
     private void insertTestBikeData() {
         ContentValues values = new ContentValues();
