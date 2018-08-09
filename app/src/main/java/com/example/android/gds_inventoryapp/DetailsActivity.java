@@ -242,11 +242,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                     // Build the formatted string
                     String formattedString = context.getString(
                             R.string.details_increase_quantity_toast_success, increment);
-
-                    // Send some feedback about the action
-                    Toast.makeText(context,
-                            formattedString,
-                            Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -272,11 +267,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                         String formattedString = context.getString(
                                 R.string.details_decrease_quantity_toast_success,
                                 increment);
-
-                        // Give some positive feedback to the user
-                        Toast.makeText(context,
-                                formattedString,
-                                Toast.LENGTH_SHORT).show();
                     } else {
                         // Send fail notice
                         Toast.makeText(context,
