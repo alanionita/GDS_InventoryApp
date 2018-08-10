@@ -238,14 +238,13 @@ public class EditorActivity extends AppCompatActivity implements
         String supplierPhoneString = supplierPhoneEditText.getText().toString().trim();
         int bikeTypeSelection = bikeTypeAutoCompleteTextView.getListSelection();
 
-        // check if it's an existing bike and where data has been entered
+        // check if it's an existing bike and whether data has been entered
         if (TextUtils.isEmpty(makeString) ||
                 TextUtils.isEmpty(modelString) ||
                 TextUtils.isEmpty(priceString) ||
                 TextUtils.isEmpty(quantityString) ||
                 TextUtils.isEmpty(supplierString) ||
-                TextUtils.isEmpty(supplierPhoneString) ||
-                bikeTypeSelection == -1) {
+                TextUtils.isEmpty(supplierPhoneString)) {
             Toast.makeText(context, R.string.null_values_warning, Toast.LENGTH_SHORT).show();
             return;
         }
